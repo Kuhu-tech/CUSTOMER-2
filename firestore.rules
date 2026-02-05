@@ -1,0 +1,9 @@
+rules_version = '2';
+// Not using restrictive rules for now — open read/write for development
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /categories/{docId} { allow read, write: if true; }
+    match /products/{docId}  { allow read, write: if true; }
+    match /users/{docId}     { allow read, write: if true; }
+  }
+}
