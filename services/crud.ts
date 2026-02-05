@@ -117,3 +117,32 @@ export const deleteProduct = async (id: string) => {
 }
 
 /* ------------------ Users (Profile) ------------------ */
+export const fetchUser = async (userId: string): Promise<UserProfile | null> => {
+  const db = getDb()
+  const snap = await getDoc(doc(db, "users", userId))
+  if (!snap.exists()) return null
+  return { id: snap.id, ...snap.data() } as UserProfile
+}
+
+export const createUser = async (
+  userId: string,
+  data: Omit<UserProfile, "id">
+) => {
+  const db = getDb()
+  await setDoc(doc(db, "users", userId), {
+    ...data,
+    updatedAt: Timestamp.now(),
+  })
+  return userId
+}
+
+export const updateUser = async (
+  userId: string,
+  data: Partial<Omit<UserProfile, "id">>
+) => {
+  const db = getDb()
+  await updateDoc(doc(db, "users", userId), {
+    ...data,
+    updatedAt: Timestamp.now(),
+  } as Record<string, unknown>)
+}
